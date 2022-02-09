@@ -573,20 +573,22 @@
       request.accept(accept);
       /* Code for downloading file from stream */
       if (accept === 'application/xml' || accept === 'text/csv') {
-        if (accept === 'application/xml') {
-          this.downloadFilePath = this.downloadFilePath + '.xml';
-        } else {
-          this.downloadFilePath = this.downloadFilePath + '.csv';
+        if (this.downloadFilePath) {
+          if (accept === 'application/xml') {
+            this.downloadFilePath = this.downloadFilePath + '.xml';
+          } else {
+            this.downloadFilePath = this.downloadFilePath + '.csv';
+          }
+          var fs = require('fs');
+          var stream = fs.createWriteStream(this.downloadFilePath);
+          request.send().pipe(stream);
+          request._endCalled = false;
+          // to create event for callback after write stream finishes
+          stream.on('finish',function(error)
+          {
+            callback(error);
+          }); 
         }
-        var fs = require('fs');
-        var stream = fs.createWriteStream(this.downloadFilePath);
-        request.send().pipe(stream);
-        request._endCalled = false;
-        // to create event for callback after write stream finishes
-        stream.on('finish',function(error)
-        {
-          callback(error);
-        }); 
       }
     }
 

@@ -95,8 +95,8 @@
 
       var authNames = [];
       var contentTypes = ['application/json;charset=utf-8'];
-      var accepts = ['application/xml', 'text/csv'];
-      var returnType = null;
+      var accepts = opts.accepts || ['application/xml', 'text/csv'];
+      var returnType = 'String';
 
       return this.apiClient.callApi(
         '/reporting/v3/report-downloads', 'GET',
